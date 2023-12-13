@@ -16,30 +16,31 @@ void printMatrix(const vector<vector<double>>& matrix) {
     } 
 } 
  
-void printVector(const vector<double>& vector) { 
-    for (const auto& elem : vector) { 
-        cout << elem << endl; 
-    } 
-} 
+void printVector(const vector<double>& vector) {
+    for (const auto& elem : vector) {
+        cout << round(elem * 1000) / 1000 << endl;
+    }
+}
  
-vector<double> computeResidualVector(const vector<vector<double>>& A, const vector<double>& x, const vector<double>& b) { 
-    vector<double> residualVector(b.size(), 0.0); 
-    for (size_t i = 0; i < A.size(); ++i) { 
-        for (size_t j = 0; j < A[i].size(); ++j) { 
-            residualVector[i] += A[i][j] * x[j]; 
-        } 
-        residualVector[i] -= b[i]; 
-    } 
-    return residualVector; 
-} 
+vector<double> computeResidualVector(const vector<vector<double>>& A, const vector<double>& x, const vector<double>& b) {
+    vector<double> residualVector(b.size(), 0.0);
+    for (size_t i = 0; i < 2; ++i) {
+        for (size_t j = 0; j < 2; ++j) {
+            residualVector[i] += A[i][j] * x[j];
+        }
+        residualVector[i] -= b[i];
+    }
+    return residualVector;
+}
  
-double computeResidualNorm(const vector<double>& residualVector) { 
-    double norm = 0.0; 
-    for (const auto& elem : residualVector) { 
-        norm += elem * elem; 
-    } 
-    return sqrt(norm); 
-} 
+double computeResidualNorm(const vector<double>& residualVector) {
+    double norm = 0.0;
+    for (size_t i = 0; i < 2; i++)
+    {
+        norm += pow(residualVector[i], 2);
+    }
+    return sqrt(norm);
+}
  
  
 vector<double> solveSystem(vector<vector<double>>& A, vector<double>& b)  
@@ -90,7 +91,6 @@ int main() {
  
     vector<double> solution = solveSystem(A, b); 
  
-    // Вывод решения 
     cout << "Решение системы:" << endl; 
     printVector(solution); 
  
@@ -98,16 +98,13 @@ int main() {
     vector<double> residualVector = computeResidualVector(originalA, solution, originalB); 
     double residualNorm = computeResidualNorm(residualVector); 
  
- 
     cout << "Вектор невязки:" << endl; 
     printVector(residualVector); 
  
     cout << "Норма вектора невязки: " << residualNorm << endl; 
- 
-    // Решение вспомогательной системы 
+
     vector<double> auxiliarySolution = solveSystem(originalA, originalB); 
- 
-    // Вычисление относительной погрешности 
+
     double relativeError = computeResidualNorm(computeResidualVector(originalA, auxiliarySolution, originalB)) / residualNorm; 
  
     cout << "Относительная погрешность: " << relativeError << endl; 
