@@ -51,7 +51,7 @@ double computeResidualNorm(vector<double> residualVector) {
 vector<double> solveSystem(vector<vector<double>>& A, vector<double>& b)
 {
     const size_t n = A.size();
- 
+
     for (size_t i = 0; i < n; ++i) {
 
         size_t maxRow = i;
@@ -94,6 +94,7 @@ int main() {
     vector<double> b = { 10.21, 3.41, 12.29 };
 
     vector<vector<double>> originalA = A;
+
     vector<double> originalB = b;
 
     vector<double> solution = solveSystem(A, b);
@@ -111,6 +112,15 @@ int main() {
 
     cout << "Норма вектора невязки: " << residualNorm << endl;
 
+    for (int i = 0; i < 2; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            originalA[j][i] *= solution[i];
+        }
+
+    }
+
     vector<double> auxiliarySolution = solveSystem(originalA, originalB);
 
     double delta = 0;
@@ -119,7 +129,7 @@ int main() {
     {
         if (abs((auxiliarySolution[i] - residualNorm) / residualNorm) > delta)
         {
-            delta = abs((auxiliarySolution[i] - residualNorm) / residualNorm);
+            delta = abs(auxiliarySolution[i] - solution[i]) / abs(solution[i]);
         }
     }
 
