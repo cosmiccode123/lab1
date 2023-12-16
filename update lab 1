@@ -124,12 +124,16 @@ int main() {
     vector<double> auxiliarySolution = solveSystem(originalA, originalB);
 
     double delta = 0;
-
+    vector<double> Error(2);
+    for (int i = 0; i < 2; i++) {
+        Error[i] = auxiliarySolution[i] - solution[i];
+    }
+    double NormError = computeResidualNorm(Error);
     for (int i = 0; i < 2; i++)
     {
-        if (abs((auxiliarySolution[i] - residualNorm) / residualNorm) > delta)
+        if (NormError / residualNorm > delta)
         {
-            delta = abs(auxiliarySolution[i] - solution[i]) / abs(solution[i]);
+            delta = NormError / residualNorm;
         }
     }
 
